@@ -32,7 +32,7 @@ class CodexTerminalManager(private val project: Project) {
         private val CODEX_TERMINAL_KEY = Key.create<Boolean>("codex.launcher.codexTerminal")
         private val CODEX_TERMINAL_RUNNING_KEY = Key.create<Boolean>("codex.launcher.codexTerminal.running")
         private val CODEX_TERMINAL_CALLBACK_KEY = Key.create<Boolean>("codex.launcher.codexTerminal.callbackRegistered")
-        private val CODEX_TERMINAL_SHIFT_ENTER_KEY = Key.create<Boolean>("codex.launcher.codexTerminal.shiftEnterSuppressed")
+        private val CODEX_TERMINAL_SHIFT_ENTER_KEY = Key.create<Boolean>("codex.launcher.codexTerminal.shiftEnterRegistered")
     }
 
     private val logger = logger<CodexTerminalManager>()
@@ -59,7 +59,7 @@ class CodexTerminalManager(private val project: Project) {
 
         existingTerminal?.let { terminal ->
             ensureTerminationCallback(terminal.widget, terminal.content)
-            ensureShiftEnterIsIgnored(terminal.widget, terminal.content)
+            ensureShiftEnterNewline(terminal.widget, terminal.content)
             if (isCodexRunning(terminal)) {
                 logger.info("Focusing active Codex terminal")
                 focusCodexTerminal(terminalManager, terminal)
@@ -80,7 +80,7 @@ class CodexTerminalManager(private val project: Project) {
         try {
             widget = terminalManager.createShellWidget(baseDir, "Codex", true, true)
             val content = markCodexTerminal(terminalManager, widget)
-            ensureShiftEnterIsIgnored(widget, content)
+            ensureShiftEnterNewline(widget, content)
             if (!sendCommandToTerminal(widget, content, command)) {
                 throw IllegalStateException("Failed to execute Codex command")
             }
@@ -274,17 +274,23 @@ class CodexTerminalManager(private val project: Project) {
         }
     }
 
-    private fun ensureShiftEnterIsIgnored(widget: TerminalWidget, content: Content?) {
+    private fun ensureShiftEnterNewline(widget: TerminalWidget, content: Content?) {
         if (content == null) return
         if (content.getUserData(CODEX_TERMINAL_SHIFT_ENTER_KEY) == true) return
 
         val component = resolveTerminalComponent(widget) ?: return
-        var suppressTyped = false
+
+        val specialNewline = "\n"
+        var suppressUntilEnterReleased = false
+
+        // Debounce to prevent double handling (repeat / multiple pipelines)
+        var lastHandledAtNanos = 0L
+
         val dispatcher = KeyEventDispatcher { event ->
             val focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().focusOwner ?: return@KeyEventDispatcher false
             if (!SwingUtilities.isDescendingFrom(focusOwner, component)) {
                 if (event.id == KeyEvent.KEY_RELEASED && event.keyCode == KeyEvent.VK_ENTER) {
-                    suppressTyped = false
+                    suppressUntilEnterReleased = false
                 }
                 return@KeyEventDispatcher false
             }
@@ -292,21 +298,34 @@ class CodexTerminalManager(private val project: Project) {
             when (event.id) {
                 KeyEvent.KEY_PRESSED -> {
                     if (event.keyCode != KeyEvent.VK_ENTER || !event.isShiftDown) return@KeyEventDispatcher false
-                    suppressTyped = true
+
+                    val now = System.nanoTime()
+                    if (now - lastHandledAtNanos < 150_000_000) { // 150ms
+                        event.consume()
+                        return@KeyEventDispatcher true
+                    }
+                    lastHandledAtNanos = now
+
+                    suppressUntilEnterReleased = true
                     event.consume()
+
+                    ApplicationManager.getApplication().invokeLater {
+                        typeSpecialNewline(widget, specialNewline)
+                    }
+
                     true
                 }
 
                 KeyEvent.KEY_TYPED -> {
-                    if (!suppressTyped) return@KeyEventDispatcher false
+                    if (!suppressUntilEnterReleased) return@KeyEventDispatcher false
                     event.consume()
                     true
                 }
 
                 KeyEvent.KEY_RELEASED -> {
-                    if (!suppressTyped) return@KeyEventDispatcher false
+                    if (!suppressUntilEnterReleased) return@KeyEventDispatcher false
                     if (event.keyCode != KeyEvent.VK_ENTER) return@KeyEventDispatcher false
-                    suppressTyped = false
+                    suppressUntilEnterReleased = false
                     event.consume()
                     true
                 }
@@ -316,11 +335,26 @@ class CodexTerminalManager(private val project: Project) {
         }
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(dispatcher)
-        Disposer.register(project) {
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher)
+
+        // IMPORTANT: dispose with terminal/content, not with project (otherwise dispatchers accumulate!)
+        runCatching {
+            Disposer.register(content) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher)
+            }
+        }.getOrElse {
+            Disposer.register(project) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher)
+            }
         }
 
         content.putUserData(CODEX_TERMINAL_SHIFT_ENTER_KEY, true)
+    }
+
+    private fun typeSpecialNewline(widget: TerminalWidget, sequence: String) {
+        val ok = typeText(widget, sequence)
+        if (!ok) {
+            logger.warn("Failed to inject Shift+Enter newline sequence into terminal")
+        }
     }
 
     private fun resolveTerminalComponent(widget: TerminalWidget): Component? {
