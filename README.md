@@ -1,54 +1,74 @@
-# Codex Launcher - IntelliJ Plugin
+# CLI Launcher (Generic) - JetBrains Plugin Base
 
-[![Version](https://img.shields.io/badge/version-1.1.13-blue.svg)](https://github.com/x0x0b/codex-launcher/releases)
-[![IntelliJ IDEA](https://img.shields.io/badge/IntelliJ%20IDEA-2024.2+-orange.svg)](https://www.jetbrains.com/idea/)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/x0x0b/codex-launcher)
+This repository provides a **cross-platform** IntelliJ Platform plugin base that keeps popular AI CLIs one click away inside JetBrains IDEs.
 
-<img width="800" alt="The screenshot of Codex Launcher." src="https://github.com/user-attachments/assets/4ee3fbd8-e384-4672-94c6-e4e9041a8e0d" />
+It is designed to work consistently on **macOS, Windows, and Linux**, and to support the same workflow across the following CLI implementations:
+- **OpenAI Codex CLI**
+- **Google Gemini CLI**
+- **OpenCode CLI**
 
-Codex Launcher is an **unofficial** IntelliJ IDEA plugin that keeps the OpenAI Codex CLI one click away inside the IDE.
+If you are looking for a ready-to-install plugin, use one of the implementation branches (links below) or download a ZIP from GitHub Releases.
 
-> **Important:** Install the [OpenAI Codex CLI](https://github.com/openai/codex) separately before using this plugin.
+## Implementations
 
-> **For Windows users:** Please select your terminal shell in the plugin settings to ensure proper functionality. Go to _Settings (→ Other Settings) → Codex Launcher_.
+Each implementation is maintained on its own branch:
 
-## ✨ Features
+- Codex Launcher: https://github.com/Eisermann/cli-launcher/tree/codex-launcher
+- Gemini Launcher: https://github.com/Eisermann/cli-launcher/tree/gemini-launcher
+- OpenCode Launcher: https://github.com/Eisermann/cli-launcher/tree/opencode-launcher
 
-- **One-click launch** from the toolbar or Tools menu
-- **Integrated terminal** that opens a dedicated "Codex" tab in the project root
-- **Completion notifications** after Codex CLI finishes processing the current run
-- **Automatic file opening** for files updated by Codex
-- **Built-in MCP server pairing** with guided setup for IntelliJ's MCP server (2025.2+)
-- **Flexible configuration** for launch modes, models, and notifications
+Downloads (plugin ZIPs):
+- https://github.com/Eisermann/cli-launcher/releases
 
-## 🛠️ Installation
+## Common Features
 
-### Prerequisites
-- IntelliJ IDEA 2024.2 or later (or other compatible JetBrains IDEs)
-- OpenAI Codex CLI installed and available in your system PATH
+All launchers built on this base share the same core behavior:
 
-### Installation
-[![Install Plugin](https://img.shields.io/badge/Install%20Plugin-JetBrains-orange?style=for-the-badge&logo=jetbrains&logoColor=white)](https://plugins.jetbrains.com/plugin/28264-codex-launcher)
+- One-click launch from the toolbar or **Tools** menu
+- Integrated terminal that opens a dedicated tab in the project root
+- Completion notifications after the CLI finishes a run
+- Automatic file opening for files updated by the CLI
+- Built-in MCP server pairing with guided setup for IntelliJ's MCP server (IDE 2025.2+)
+- Flexible settings for launch mode, models, and notification behavior
 
-## 🚀 Usage
+## Prerequisites
 
-### Quick Start
-1. Click the **Launch Codex** button in the main toolbar.
-2. Or choose **Tools** → **Launch Codex**.
-3. The integrated terminal opens a new "Codex" tab and runs `codex` automatically.
+- JetBrains IDE based on IntelliJ Platform (typically **2024.2+**)
+- The target CLI installed separately and available on your `PATH`:
+  - Codex CLI: https://github.com/openai/codex
+  - Gemini CLI: https://github.com/google/gemini-cli
+  - OpenCode CLI: https://github.com/anomalyco/opencode
 
-### Configuration
-Open **Settings (→ Other Settings) → Codex Launcher** to pick the launch mode, model, notification behavior, and auto-open options.
+Windows note:
+- On Windows, you may need to select the terminal shell in the plugin settings to ensure proper command execution.
 
-## 📝 Development
+## Usage
 
-### Building from Source
+1. Click the launcher button in the main toolbar, or use **Tools** → **Launch ...**.
+2. The plugin opens an IDE terminal tab and runs the CLI in your project root.
+3. When the CLI finishes, the plugin can notify you and optionally open changed files.
+
+## Development
+
+This repo is a workspace of IntelliJ Platform plugins. Build from within the target implementation module/branch.
+
+Example (build a distributable plugin ZIP):
+
 ```bash
-git clone https://github.com/x0x0b/codex-launcher.git
-cd codex-launcher
 ./gradlew buildPlugin
 ```
 
-## 📄 License
+To run the plugin in a sandbox IDE:
 
-This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+```bash
+./gradlew runIde
+```
+
+## Credits
+
+This launcher base and its derivatives are based on the Codex Launcher lineage by x0x0b:
+- https://github.com/x0x0b/codex-launcher
+
+## License
+
+See `LICENSE` in the selected implementation branch/module.
