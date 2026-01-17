@@ -1,4 +1,4 @@
-# CLI Launcher (Generic) - JetBrains Plugin Base
+# CLI Launcher - JetBrains Plugin Base
 
 This repository provides a **cross-platform** IntelliJ Platform plugin base that keeps popular AI CLIs one click away inside JetBrains IDEs.
 
