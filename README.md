@@ -1,6 +1,6 @@
 # Gemini Launcher - IntelliJ Plugin
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/eisermann/gemini-launcher/releases)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/eisermann/cli-launcher/releases)
 [![IntelliJ IDEA](https://img.shields.io/badge/IntelliJ%20IDEA-2024.2+-orange.svg)](https://www.jetbrains.com/idea/)
 
 <img width="800" alt="The screenshot of Gemini Launcher." src="https://github.com/user-attachments/assets/4ee3fbd8-e384-4672-94c6-e4e9041a8e0d" />
@@ -29,7 +29,7 @@ Gemini Launcher is an **unofficial** IntelliJ IDEA plugin that keeps the Google 
 - Google Gemini CLI installed and available in your system PATH
 
 ### Installation
-[![Install Plugin](https://img.shields.io/badge/Install%20Plugin-JetBrains-orange?style=for-the-badge&logo=jetbrains&logoColor=white)](https://plugins.jetbrains.com/plugin/gemini-launcher)
+TBC
 
 ## 🚀 Usage
 
@@ -45,7 +45,7 @@ Open **Settings (→ Other Settings) → Gemini Launcher** to pick the launch mo
 
 ### Building from Source
 ```bash
-git clone https://github.com/eisermann/gemini-launcher.git
+git clone https://github.com/eisermann/cli-launcher.git
 cd gemini-launcher
 ./gradlew buildPlugin
 ```

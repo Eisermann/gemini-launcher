@@ -274,23 +274,23 @@ class GeminiTerminalManager(private val project: Project) {
         }
     }
 
-	private fun ensureShiftEnterNewline(widget: TerminalWidget, content: Content?) {
-	    if (content == null) return
-	    if (content.getUserData(GEMINI_TERMINAL_SHIFT_ENTER_KEY) == true) return
+    private fun ensureShiftEnterNewline(widget: TerminalWidget, content: Content?) {
+        if (content == null) return
+        if (content.getUserData(GEMINI_TERMINAL_SHIFT_ENTER_KEY) == true) return
 
         val component = resolveTerminalComponent(widget) ?: return
-        // Use a scoped KeyEventDispatcher tied to this terminal component.
-        // KeyListener/InputMap bindings are sometimes bypassed by the terminal's internal key handling.
-        //
-        // For Gemini-managed terminals, we currently suppress Shift+Enter entirely.
-        // JetBrains Terminal already supports multiline input via Option/Alt+Enter, and attempts to emulate
-        // "newline without submit" for Shift+Enter can lead to double-newlines or unexpected CLI behavior.
-        var suppressTyped = false
+
+        val specialNewline = "\n"
+        var suppressUntilEnterReleased = false
+
+        // Debounce to prevent double handling (repeat / multiple pipelines)
+        var lastHandledAtNanos = 0L
+
         val dispatcher = KeyEventDispatcher { event ->
             val focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().focusOwner ?: return@KeyEventDispatcher false
             if (!SwingUtilities.isDescendingFrom(focusOwner, component)) {
                 if (event.id == KeyEvent.KEY_RELEASED && event.keyCode == KeyEvent.VK_ENTER) {
-                    suppressTyped = false
+                    suppressUntilEnterReleased = false
                 }
                 return@KeyEventDispatcher false
             }
@@ -298,21 +298,35 @@ class GeminiTerminalManager(private val project: Project) {
             when (event.id) {
                 KeyEvent.KEY_PRESSED -> {
                     if (event.keyCode != KeyEvent.VK_ENTER || !event.isShiftDown) return@KeyEventDispatcher false
-                    suppressTyped = true
+
+                    // debounce
+                    val now = System.nanoTime()
+                    if (now - lastHandledAtNanos < 150_000_000) { // 150ms
+                        event.consume()
+                        return@KeyEventDispatcher true
+                    }
+                    lastHandledAtNanos = now
+
+                    suppressUntilEnterReleased = true
                     event.consume()
+
+                    ApplicationManager.getApplication().invokeLater {
+                        typeSpecialNewline(widget, specialNewline)
+                    }
+
                     true
                 }
 
                 KeyEvent.KEY_TYPED -> {
-                    if (!suppressTyped) return@KeyEventDispatcher false
+                    if (!suppressUntilEnterReleased) return@KeyEventDispatcher false
                     event.consume()
                     true
                 }
 
                 KeyEvent.KEY_RELEASED -> {
-                    if (!suppressTyped) return@KeyEventDispatcher false
+                    if (!suppressUntilEnterReleased) return@KeyEventDispatcher false
                     if (event.keyCode != KeyEvent.VK_ENTER) return@KeyEventDispatcher false
-                    suppressTyped = false
+                    suppressUntilEnterReleased = false
                     event.consume()
                     true
                 }
@@ -322,11 +336,29 @@ class GeminiTerminalManager(private val project: Project) {
         }
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(dispatcher)
-        Disposer.register(project) {
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher)
+
+        // IMPORTANT: dispose with terminal/content, not with project (otherwise dispatchers accumulate!)
+        // If Content is not Disposable in your API level, use a ContentManagerListener and remove there.
+        runCatching {
+            Disposer.register(content) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher)
+            }
+        }.getOrElse {
+            Disposer.register(project) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher)
+            }
         }
 
         content.putUserData(GEMINI_TERMINAL_SHIFT_ENTER_KEY, true)
+    }
+
+    private fun typeSpecialNewline(widget: TerminalWidget, sequence: String) {
+        // IMPORTANT: do not call sendCommandToExecute here (it appends/executes).
+        // We only want raw input injection.
+        val ok = typeText(widget, sequence)
+        if (!ok) {
+            logger.warn("Failed to inject Shift+Enter newline sequence into terminal")
+        }
     }
 
     private fun resolveTerminalComponent(widget: TerminalWidget): Component? {
