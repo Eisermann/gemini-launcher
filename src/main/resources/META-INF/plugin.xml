@@ -1,11 +1,11 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
   <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-  <id>com.github.eisermann.codex-launcher</id>
+  <id>com.github.eisermann.codex-link</id>
 
   <!-- Public plugin name should be written in Title Case.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
-  <name>Codex Launcher</name>
+  <name>Codex Link</name>
 
   <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
   <vendor url="https://eisermann.github.io/">eisermann</vendor>
@@ -15,11 +15,11 @@
   <description><![CDATA[
         <blockquote><b>Important:</b> Install the <a href="https://github.com/openai/codex">OpenAI Codex CLI</a> separately before using this plugin.</blockquote>
 
-        <blockquote><b>For Windows users:</b> Please select your terminal shell in the plugin settings (<em>Settings (→ Other Settings) → Codex Launcher</em>) to ensure proper functionality.</blockquote>
+        <blockquote><b>For Windows users:</b> Please select your terminal shell in the plugin settings (<em>Settings (→ Other Settings) → Codex Link</em>) to ensure proper functionality.</blockquote>
 
         <h2>Overview</h2>
         <p>
-          Codex Launcher is an <b>unofficial</b> IntelliJ IDEA plugin that keeps the OpenAI Codex CLI one click away inside the IDE.
+          Codex Link is an <b>unofficial</b> IntelliJ IDEA plugin that keeps the OpenAI Codex CLI one click away inside the IDE.
         </p>
 
         <h2>Features</h2>
@@ -40,7 +40,7 @@
         </ol>
 
         <h2>Configuration</h2>
-        <p>Open <em>Settings (→ Other Settings) → Codex Launcher</em> to pick the launch mode, model, notification behavior, and auto-open options.</p>
+        <p>Open <em>Settings (→ Other Settings) → Codex Link</em> to pick the launch mode, model, notification behavior, and auto-open options.</p>
 
         <h2>Requirements</h2>
         <ul>
@@ -57,20 +57,20 @@
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
-    <notificationGroup id="CodexLauncher" displayType="BALLOON" isLogByDefault="true"/>
-    <applicationConfigurable instance="com.github.eisermann.codexlauncher.settings.ui.CodexLauncherConfigurable" id="com.github.eisermann.codexlauncher.settings" displayName="Codex Launcher"/>
-    <postStartupActivity implementation="com.github.eisermann.codexlauncher.startup.CodexStartupActivity"/>
-    <fileEditorProvider implementation="com.github.eisermann.codexlauncher.mcp.CodexDiffFileEditorProvider"/>
+    <notificationGroup id="CodexLink" displayType="BALLOON" isLogByDefault="true"/>
+    <applicationConfigurable instance="com.github.eisermann.codexlink.settings.ui.CodexLinkConfigurable" id="com.github.eisermann.codexlink.settings" displayName="Codex Link"/>
+    <postStartupActivity implementation="com.github.eisermann.codexlink.startup.CodexStartupActivity"/>
+    <fileEditorProvider implementation="com.github.eisermann.codexlink.mcp.CodexDiffFileEditorProvider"/>
   </extensions>
 
   <projectListeners>
-    <listener class="com.github.eisermann.codexlauncher.terminal.ProjectClosingListener"
+    <listener class="com.github.eisermann.codexlink.terminal.ProjectClosingListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
   </projectListeners>
 
   <actions>
-    <action id="com.github.eisermann.codexlauncher.launch"
-      class="com.github.eisermann.codexlauncher.actions.LaunchCodexAction"
+    <action id="com.github.eisermann.codexlink.launch"
+      class="com.github.eisermann.codexlink.actions.LaunchCodexAction"
       text="Launch Codex" description="Open a Codex terminal" icon="icons/codex.svg">
       <!-- Keyboard shortcut: Option+Cmd+J (macOS) or Alt+Ctrl+J (Windows/Linux) -->
       <keyboard-shortcut keymap="$default" first-keystroke="control alt J"/>
