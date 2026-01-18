@@ -9,7 +9,7 @@ It is designed to work consistently on **macOS, Windows, and Linux**, and to sup
 
 If you are looking for a ready-to-install plugin, use one of the implementation branches (links below) or download a ZIP from GitHub Releases.
 
-## Implementations
+## 🔌 Implementations
 
 Each implementation is maintained on its own branch:
 
@@ -20,7 +20,7 @@ Each implementation is maintained on its own branch:
 Downloads (plugin ZIPs):
 - https://github.com/Eisermann/cli-launcher/releases
 
-## Common Features
+## ✨ Common Features
 
 All plugins built on this base share the same core behavior:
 
@@ -31,7 +31,7 @@ All plugins built on this base share the same core behavior:
 - Built-in MCP server pairing with guided setup for IntelliJ's MCP server (IDE 2025.2+)
 - Flexible settings for launch mode, models, and notification behavior
 
-## Prerequisites
+## 📋 Prerequisites
 
 - JetBrains IDE based on IntelliJ Platform (typically **2024.2+**)
 - The target CLI installed separately and available on your `PATH`:
@@ -42,13 +42,13 @@ All plugins built on this base share the same core behavior:
 Windows note:
 - On Windows, you may need to select the terminal shell in the plugin settings to ensure proper command execution.
 
-## Usage
+## 🚀 Usage
 
 1. Click the plugin button in the main toolbar, or use **Tools** → **Launch ...**.
 2. The plugin opens an IDE terminal tab and runs the CLI in your project root.
 3. When the CLI finishes, the plugin can notify you and optionally open changed files.
 
-## Development
+## 🔧 Development
 
 This repo is a workspace of IntelliJ Platform plugins. Build from within the target implementation module/branch.
 
@@ -64,11 +64,11 @@ To run the plugin in a sandbox IDE:
 ./gradlew runIde
 ```
 
-## Credits
+## 🙏 Credits
 
 This plugin base and its derivatives are based on the Codex Launcher by x0x0b:
 - https://github.com/x0x0b/codex-launcher
 
-## License
+## 📄 License
 
 See `LICENSE` in the selected implementation branch/module.
