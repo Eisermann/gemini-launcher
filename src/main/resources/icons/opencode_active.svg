@@ -5,7 +5,13 @@
       <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
   </defs>
-  <path d="M12 3L19.79 7.5V16.5L12 21L4.21 16.5V7.5L12 3Z" fill="#F5B041" stroke="#F5B041" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Active state glow -->
+  <circle cx="12" cy="12" r="11" fill="#E67E22" opacity="0.15"/>
+  
+  <!-- Main Hexagon - Active Orange -->
+  <path d="M12 3L19.79 7.5V16.5L12 21L4.21 16.5V7.5L12 3Z" fill="#D35400" stroke="#D35400" stroke-width="2" stroke-linejoin="round"/>
+  
+  <!-- Inner Code Symbols - White Glow -->
   <path d="M9 8L13 12L9 16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#glow)"/>
   <line x1="14" y1="16" x2="18" y2="16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" filter="url(#glow)"/>
 </svg>
