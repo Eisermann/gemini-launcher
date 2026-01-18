@@ -5,6 +5,12 @@
       <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
   </defs>
-  <path d="M12 3L19.79 7.5V16.5L12 21L4.21 16.5V7.5L12 3Z" fill="#10a37f" stroke="#10a37f" stroke-width="2" stroke-linejoin="round"/>
-  <circle cx="12" cy="12" r="3" fill="#FFFFFF" filter="url(#glow)"/>
+  <!-- Active state glow -->
+  <circle cx="12" cy="12" r="11" fill="#9B59B6" opacity="0.15"/>
+  
+  <!-- Main Hexagon - Active Purple -->
+  <path d="M12 3L19.79 7.5V16.5L12 21L4.21 16.5V7.5L12 3Z" fill="#8E44AD" stroke="#8E44AD" stroke-width="2" stroke-linejoin="round"/>
+  
+  <!-- Inner Rect - White Glow -->
+  <rect x="10" y="10" width="4" height="4" fill="#FFFFFF" filter="url(#glow)"/>
 </svg>

@@ -1,17 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Gemini Launcher">
-  <!-- Gemini sparkle/star icon for plugin -->
-  <!-- Background circle for better visibility -->
-  <circle cx="12" cy="12" r="10" fill="#1A73E8" opacity="0.1"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Codex Launcher">
+  <!-- Codex Plugin Icon: Inactive Wireframe + Shade Circle -->
+  <!-- Background circle for better visibility (matched to active version size) -->
+  <circle cx="12" cy="12" r="11" fill="#8E44AD" opacity="0.1"></circle>
 
-  <!-- Main star shape - solid blue -->
-  <path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"
-        fill="#4285F4" stroke="#1A73E8" stroke-width="0.5"/>
-
-  <!-- Inner center accent -->
-  <circle cx="12" cy="12" r="2" fill="#34A853"/>
-  <circle cx="12" cy="12" r="0.8" fill="#ffffff"/>
-
-  <!-- Small accent sparkle -->
-  <circle cx="17" cy="7" r="1.5" fill="#EA4335" opacity="0.8"/>
-  <circle cx="17" cy="7" r="0.5" fill="#ffffff"/>
+  <!-- Main Hexagon - Wireframe Purple -->
+  <path d="M12 3L19.79 7.5V16.5L12 21L4.21 16.5V7.5L12 3Z" fill="none" stroke="#8E44AD" stroke-width="2" stroke-linejoin="round"/>
+  
+  <!-- Inner Rect - Purple -->
+  <rect x="10" y="10" width="4" height="4" fill="#8E44AD"/>
 </svg>
