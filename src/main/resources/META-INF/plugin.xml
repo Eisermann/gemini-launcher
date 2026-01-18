@@ -1,11 +1,11 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
   <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-  <id>com.github.eisermann.gemini-launcher</id>
+  <id>com.github.eisermann.gemini-link</id>
 
   <!-- Public plugin name should be written in Title Case.
        Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
-  <name>Gemini Launcher</name>
+  <name>Gemini Link</name>
 
   <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
   <vendor url="https://eisermann.github.io/">eisermann</vendor>
@@ -15,11 +15,11 @@
   <description><![CDATA[
         <blockquote><b>Important:</b> Install the <a href="https://github.com/google/gemini-cli">Gemini CLI</a> separately before using this plugin.</blockquote>
 
-        <blockquote><b>For Windows users:</b> Please select your terminal shell in the plugin settings (<em>Settings (→ Other Settings) → Gemini Launcher</em>) to ensure proper functionality.</blockquote>
+        <blockquote><b>For Windows users:</b> Please select your terminal shell in the plugin settings (<em>Settings (→ Other Settings) → Gemini Link</em>) to ensure proper functionality.</blockquote>
 
         <h2>Overview</h2>
         <p>
-          Gemini Launcher is an <b>unofficial</b> IntelliJ IDEA plugin that keeps the Google Gemini CLI one click away inside the IDE.
+          Gemini Link is an <b>unofficial</b> IntelliJ IDEA plugin that keeps the Google Gemini CLI one click away inside the IDE.
         </p>
 
         <h2>Features</h2>
@@ -40,7 +40,7 @@
         </ol>
 
         <h2>Configuration</h2>
-        <p>Open <em>Settings (→ Other Settings) → Gemini Launcher</em> to pick the launch mode, model, notification behavior, and auto-open options.</p>
+        <p>Open <em>Settings (→ Other Settings) → Gemini Link</em> to pick the launch mode, model, notification behavior, and auto-open options.</p>
 
         <h2>Requirements</h2>
         <ul>
@@ -57,20 +57,20 @@
   <!-- Extension points defined by the plugin.
        Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
   <extensions defaultExtensionNs="com.intellij">
-    <notificationGroup id="GeminiLauncher" displayType="BALLOON" isLogByDefault="true"/>
-    <applicationConfigurable instance="com.github.eisermann.geminilauncher.settings.ui.GeminiLauncherConfigurable" id="com.github.eisermann.geminilauncher.settings" displayName="Gemini Launcher"/>
-    <postStartupActivity implementation="com.github.eisermann.geminilauncher.startup.GeminiStartupActivity"/>
-    <fileEditorProvider implementation="com.github.eisermann.geminilauncher.mcp.GeminiDiffFileEditorProvider"/>
+    <notificationGroup id="GeminiLink" displayType="BALLOON" isLogByDefault="true"/>
+    <applicationConfigurable instance="com.github.eisermann.geminilink.settings.ui.GeminiLinkConfigurable" id="com.github.eisermann.geminilink.settings" displayName="Gemini Link"/>
+    <postStartupActivity implementation="com.github.eisermann.geminilink.startup.GeminiStartupActivity"/>
+    <fileEditorProvider implementation="com.github.eisermann.geminilink.mcp.GeminiDiffFileEditorProvider"/>
   </extensions>
 
   <projectListeners>
-    <listener class="com.github.eisermann.geminilauncher.terminal.ProjectClosingListener"
+    <listener class="com.github.eisermann.geminilink.terminal.ProjectClosingListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
   </projectListeners>
 
   <actions>
-    <action id="com.github.eisermann.geminilauncher.launch"
-      class="com.github.eisermann.geminilauncher.actions.LaunchGeminiAction"
+    <action id="com.github.eisermann.geminilink.launch"
+      class="com.github.eisermann.geminilink.actions.LaunchGeminiAction"
       text="Launch Gemini" description="Open a Gemini terminal" icon="icons/gemini.svg">
       <!-- Keyboard shortcut: Option+Cmd+G (macOS) or Alt+Ctrl+G (Windows/Linux) -->
       <keyboard-shortcut keymap="$default" first-keystroke="control alt G"/>

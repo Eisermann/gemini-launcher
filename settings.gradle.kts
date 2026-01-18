@@ -1,1 +1,1 @@
-rootProject.name = "gemini-launcher"
+rootProject.name = "gemini-link"
