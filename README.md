@@ -1,4 +1,4 @@
-# CLI Launcher (Generic) - JetBrains Plugin Base
+# CLI Link - JetBrains Plugin Base
 
 This repository provides a **cross-platform** IntelliJ Platform plugin base that keeps popular AI CLIs one click away inside JetBrains IDEs.
 
@@ -13,16 +13,16 @@ If you are looking for a ready-to-install plugin, use one of the implementation 
 
 Each implementation is maintained on its own branch:
 
-- Codex Launcher: https://github.com/Eisermann/cli-launcher/tree/codex-launcher
-- Gemini Launcher: https://github.com/Eisermann/cli-launcher/tree/gemini-launcher
-- OpenCode Launcher: https://github.com/Eisermann/cli-launcher/tree/opencode-launcher
+- Codex Link: https://github.com/Eisermann/cli-launcher/tree/codex-link
+- Gemini Link: https://github.com/Eisermann/cli-launcher/tree/gemini-link
+- OpenCode Link: https://github.com/Eisermann/cli-launcher/tree/opencode-link
 
 Downloads (plugin ZIPs):
 - https://github.com/Eisermann/cli-launcher/releases
 
 ## Common Features
 
-All launchers built on this base share the same core behavior:
+All plugins built on this base share the same core behavior:
 
 - One-click launch from the toolbar or **Tools** menu
 - Integrated terminal that opens a dedicated tab in the project root
@@ -44,7 +44,7 @@ Windows note:
 
 ## Usage
 
-1. Click the launcher button in the main toolbar, or use **Tools** → **Launch ...**.
+1. Click the plugin button in the main toolbar, or use **Tools** → **Launch ...**.
 2. The plugin opens an IDE terminal tab and runs the CLI in your project root.
 3. When the CLI finishes, the plugin can notify you and optionally open changed files.
 
@@ -66,7 +66,7 @@ To run the plugin in a sandbox IDE:
 
 ## Credits
 
-This launcher base and its derivatives are based on the Codex Launcher lineage by x0x0b:
+This plugin base and its derivatives are based on the Codex Launcher by x0x0b:
 - https://github.com/x0x0b/codex-launcher
 
 ## License
